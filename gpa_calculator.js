@@ -10,13 +10,14 @@ class Module {
     }
     getDetails() {
         // get details about the module
-        this.credit = input.questionFloat("Please input credit points of module\n>>>");
+        this.credit = input.questionFloat("Please input credit points of module\n>>>");//gets credit points of mod
         do {
+            // gets current grade of mod
             this.grade = input.question("Please input your current grade of this module\n>>").toLowerCase();
-            if (this.grade != "a" && this.grade != "b+" && this.grade != "b" && this.grade != "c+" && this.grade != "c" && this.grade != "d+" && this.grade != "d" && this.grade != "pass" && this.grade != "fail") {
+            if (this.grade != "a" && this.grade != "b+" && this.grade != "b" && this.grade != "c+" && this.grade != "c" && this.grade != "d+" && this.grade != "d" && this.grade != "d-" && this.grade!="pass" && this.grade != "absent" && this.grade != "fail") {
                 console.log("Invalid input!\n")
             }
-        } while (this.grade != "a" && this.grade != "b+" && this.grade != "b" && this.grade != "c+" && this.grade != "c" && this.grade != "d+" && this.grade != "d" && this.grade != "pass" && this.grade != "fail");
+        } while (this.grade != "a" && this.grade != "b+" && this.grade != "b" && this.grade != "c+" && this.grade != "c" && this.grade != "d+" && this.grade != "d" && this.grade != "d-" && this.grade!="pass" && this.grade != "absent" && this.grade != "fail");
 
         var confirm = input.question(`module:${this.name}\n\nCredit:${this.credit}\n\nYour Grade:${this.grade}\n\nAre the following details correct? Press x to confirm, press y to cancel and return to main menu \npress any other key to enter the details again\n>>> `);
         if (confirm == "y") {
@@ -29,12 +30,13 @@ class Module {
 
     }
     alterGrade() {
+        // allows you to alter your grade
         do {
             this.grade = input.question("Please input your current grade of this module\n\n>>>");
-            if (this.grade != "a" && this.grade != "b+" && this.grade != "b" && this.grade != "c+" && this.grade != "c" && this.grade != "d+" && this.grade != "d" && this.grade != "pass" && this.grade != "fail") {
+            if (this.grade != "a" && this.grade != "b+" && this.grade != "b" && this.grade != "c+" && this.grade != "c" && this.grade != "d+" && this.grade != "d" && this.grade != "d-" && this.grade!="pass" && this.grade != "absent" && this.grade != "fail") {
                 console.log("Invalid input!\n")
             }
-        } while (this.grade != "a" && this.grade != "b+" && this.grade != "b" && this.grade != "c+" && this.grade != "c" && this.grade != "d+" && this.grade != "d" && this.grade != "pass" && this.grade != "fail");
+        } while (this.grade != "a" && this.grade != "b+" && this.grade != "b" && this.grade != "c+" && this.grade != "c" && this.grade != "d+" && this.grade != "d" && this.grade != "d-" && this.grade!="pass" && this.grade != "absent" && this.grade != "fail");
     }
     getGrade() {
         // gets the grade in numbers
@@ -55,6 +57,8 @@ class Module {
                 break;
             case "pass": this.score = 0.5;
                 break;
+            case "absent": this.score = 0.5;
+            break;
             case "fail": this.score = 0.0;
                 break;
         }
@@ -74,6 +78,7 @@ function WriteFile(relPath, data) {
     return fetch.writeFileSync(path.join(__dirname, relPath), data); // zzzz....
 }
 function addModule(name) {
+    // add a module
     class1 = new Module(name);
     class1.getDetails();
     class1.getGrade();
@@ -132,23 +137,30 @@ function gpa() {
 
 }
 function deleteModule() {
-    var s = "";
-    for (i = 0; i < modules.modules.length; i++) {
-        s += `${i + 1}) ${modules.modules[i].name} \n`;
-    }
-    do {
-        var choiceMod = input.questionInt(`${s}Which module would you like to alter? Press 0 to return to main menu\n\n>>>`);
-    } while (choiceMod <= 0 && choiceMod > modules.modules.length)
-
-    if (choiceMod == 0) {
+    if (modules.modules.length == 0) {
+        console.log("You haven't entered any modules yet! Go add a module to delete one!\n");
         mainMenu();
     }
     else {
-        modules.modules.splice(choiceMod - 1, 1);
-        WriteFile("module.json", JSON.stringify(modules));
-        console.log("Success!\n");
-        mainMenu()
+        var s = "";
+        for (i = 0; i < modules.modules.length; i++) {
+            s += `${i + 1}) ${modules.modules[i].name} \n`;
+        }
+        do {
+            var choiceMod = input.questionInt(`${s}Which module would you like to alter? Press 0 to return to main menu\n\n>>>`);
+        } while (choiceMod <= 0 && choiceMod > modules.modules.length)
+
+        if (choiceMod == 0) {
+            mainMenu();
+        }
+        else {
+            modules.modules.splice(choiceMod - 1, 1);
+            WriteFile("module.json", JSON.stringify(modules));
+            console.log("Success!\n");
+            mainMenu()
+        }
     }
+
 }
 function mainMenu() {
     do {
